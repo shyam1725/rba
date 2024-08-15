@@ -19,10 +19,10 @@ export interface Task {
 
 const ELEMENT_DATA: Task[] = [
   {csiId: 101, app: 'TikTok', server: 'tiktok.com', instance: 0, env: 0, fnId: 11, tech: 'Android', taskOrder: 102, action: 'Break'},
-  {csiId: 101, app: 'TikTok', server: 'tiktok.com', instance: 0, env: 0, fnId: 11, tech: 'Android', taskOrder: 102, action: 'Break'},
-  {csiId: 101, app: 'TikTok', server: 'tiktok.com', instance: 0, env: 0, fnId: 11, tech: 'Android', taskOrder: 102, action: 'Break'},
-  {csiId: 101, app: 'TikTok', server: 'tiktok.com', instance: 0, env: 0, fnId: 11, tech: 'Android', taskOrder: 102, action: 'Break'},
-  {csiId: 101, app: 'TikTok', server: 'tiktok.com', instance: 0, env: 0, fnId: 11, tech: 'Android', taskOrder: 102, action: 'Break'},
+  {csiId: 102, app: 'TikTok', server: 'tiktok.com', instance: 0, env: 0, fnId: 11, tech: 'Android', taskOrder: 102, action: 'Break'},
+  {csiId: 103, app: 'TikTok', server: 'tiktok.com', instance: 0, env: 0, fnId: 11, tech: 'Android', taskOrder: 102, action: 'Break'},
+  {csiId: 104, app: 'TikTok', server: 'tiktok.com', instance: 0, env: 0, fnId: 11, tech: 'Android', taskOrder: 102, action: 'Break'},
+  {csiId: 105, app: 'TikTok', server: 'tiktok.com', instance: 0, env: 0, fnId: 11, tech: 'Android', taskOrder: 102, action: 'Break'},
 // Add more data as needed
 ];
 
@@ -34,12 +34,15 @@ const ELEMENT_DATA: Task[] = [
 export class AppComponent {
   showAdvancedOptions = false;
   displayedColumns: string[] = ['Select', 'csiId', 'app', 'server', 'instance', 'env', 'fnId', 'tech', 'taskOrder', 'action'];
-  dataSource = new MatTableDataSource(ELEMENT_DATA);
-  totalItems = ELEMENT_DATA.length;
+  SELECTED_DATA = [];
+  dataSource!: MatTableDataSource<Task>;
+  totalItems = this.SELECTED_DATA.length;
   selectedTasks: Task[] = [];
   pageSize = 5;
 
-  constructor(public dialog: MatDialog) {}
+  constructor(public dialog: MatDialog) {
+    this.dataSource = new MatTableDataSource<Task>(this.SELECTED_DATA);
+  }
 
   toggleAdvancedOptions() {
     this.showAdvancedOptions = !this.showAdvancedOptions;
@@ -52,9 +55,19 @@ export class AppComponent {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-      // Logic to handle the result
+      console.log('The dialog was closed', result);
+      if (result && Array.isArray(result)) {
+        this.dataSource.data = [...this.dataSource.data, ...result];
+      }
     });
+  }
+
+  deleteTask(task: Task): void {
+    const index = this.dataSource.data.indexOf(task);
+    if (index !== -1) {
+      this.dataSource.data.splice(index, 1);
+      this.dataSource._updateChangeSubscription(); // This is required to refresh the table
+    }
   }
 
   toggleSelection(task: Task) {
@@ -91,6 +104,6 @@ export class AppComponent {
   onPageChange(event: PageEvent) {
     const startIndex = event.pageIndex * event.pageSize;
     const endIndex = startIndex + event.pageSize;
-    this.dataSource.data = ELEMENT_DATA.slice(startIndex, endIndex);
+    this.dataSource.data = this.SELECTED_DATA.slice(startIndex, endIndex);
   }
 }

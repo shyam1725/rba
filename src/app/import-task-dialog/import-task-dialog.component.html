@@ -7,7 +7,6 @@
     <mat-radio-button value="option3">Break Events</mat-radio-button>
   </mat-radio-group>
   <div>
-
     <button mat-stroked-button type="button" (click)="toggleFilters()">
       <mat-icon>filter_list</mat-icon>Filters
     </button>
@@ -17,6 +16,13 @@
 <!-- Filters Section -->
 <div *ngIf="filtersVisible">
   <div *ngFor="let filter of filters; let i = index" class="filter-row">
+    <mat-form-field *ngIf="i > 0">
+      <mat-select placeholder="Operator" [(value)]="filter.operator">
+        <mat-option value="and">And</mat-option>
+        <mat-option value="or">Or</mat-option>
+      </mat-select>
+    </mat-form-field>
+
     <mat-form-field>
       <mat-select placeholder="Column" [(value)]="filter.column">
         <mat-option value="csiId">CSI ID</mat-option>
@@ -37,6 +43,7 @@
         <!-- Add more conditions as needed -->
       </mat-select>
     </mat-form-field>
+
     <mat-form-field>
       <input matInput placeholder="Value" [(ngModel)]="filter.value">
     </mat-form-field>
@@ -44,23 +51,28 @@
     <button class="remove-condition" mat-button type="button" color="warn" (click)="removeFilter(i)" *ngIf="i > 0">
       <mat-icon>remove_circle_outline</mat-icon> Remove
     </button>
-    <div *ngIf="i == 0">
+
+    <div *ngIf="i === 0">
       <button mat-button type="button" color="success" (click)="toggleFilters()">
         <mat-icon>autorenew</mat-icon>
       </button>
-      <button class="add-filter"  mat-stroked-button type="button" >
+      <button class="add-filter" mat-stroked-button type="button">
         Search
       </button>
-      <button *ngIf="filtersVisible" class="add-filter" mat-stroked-button type="button" (click)="addFilter()">Add
-        Filter</button>
-
+      <button *ngIf="filtersVisible" class="add-filter" mat-stroked-button type="button" (click)="addFilter()">Add Filter</button>
     </div>
   </div>
-
 </div>
 
 <mat-table [dataSource]="dataSource" class="mat-elevation-z8 rba-mat-table">
-
+  <ng-container matColumnDef="select">
+    <mat-header-cell class="selected-task-first-column" *matHeaderCellDef>
+      <mat-checkbox (change)="selectAll($event.checked)"></mat-checkbox>
+    </mat-header-cell>
+    <mat-cell class="selected-task-first-column" *matCellDef="let row">
+      <mat-checkbox (click)="$event.stopPropagation()" (change)="toggleSelection(row)" [checked]="isSelected(row)"></mat-checkbox>
+    </mat-cell>
+  </ng-container>
 
   <ng-container matColumnDef="csiId">
     <mat-header-cell *matHeaderCellDef> CSI ID </mat-header-cell>
@@ -75,6 +87,11 @@
   <ng-container matColumnDef="server">
     <mat-header-cell *matHeaderCellDef> Server </mat-header-cell>
     <mat-cell *matCellDef="let element"> {{element.server}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="environment">
+    <mat-header-cell *matHeaderCellDef> Environment </mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.environment}} </mat-cell>
   </ng-container>
 
   <ng-container matColumnDef="instance">

@@ -157,10 +157,8 @@
         <mat-cell *matCellDef="let element">
           <mat-select id="action-column" [(value)]="element.action" placeholder="Select Action">
             <mat-option value="Break">Break</mat-option>
-            <mat-option value="Delete">Start</mat-option>
-            <mat-option value="Delete">Stop</mat-option>
           </mat-select>
-          <button mat-button color="warn"><mat-icon>delete</mat-icon></button>
+          <button mat-button (click)="deleteTask(element)" color="warn"><mat-icon>delete</mat-icon></button>
         </mat-cell>
       </ng-container>
 

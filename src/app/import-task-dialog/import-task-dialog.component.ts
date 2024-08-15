@@ -4,6 +4,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Task } from '../app.component';
 
 interface Filter {
+  operator: string;
   column: string;
   condition: string;
   value: string;
@@ -16,11 +17,11 @@ interface Filter {
 })
 export class ImportTaskDialogComponent {
 
-  displayedColumns: string[] = ['csiId', 'app', 'server', 'instance', 'tech'];
+  displayedColumns: string[] = ['select', 'csiId', 'app', 'server', 'environment', 'instance', 'tech'];
   dataSource: MatTableDataSource<Task>;
   selectedTasks: Task[] = [];
-  filtersVisible: boolean = false;  // State to control the visibility of filters section
-  filters: Filter[] = [];  // Store the added filters
+  filtersVisible: boolean = false;
+  filters: Filter[] = [];
 
   constructor(
     public dialogRef: MatDialogRef<ImportTaskDialogComponent>,
@@ -38,8 +39,16 @@ export class ImportTaskDialogComponent {
     }
   }
 
-  selectAll() {
-    this.selectedTasks = [...this.data.tasks];
+  selectAll(checked: boolean) {
+    if (checked) {
+      this.selectedTasks = this.dataSource.data.slice();
+    } else {
+      this.selectedTasks = [];
+    }
+  }
+
+  isSelected(task: Task): boolean {
+    return this.selectedTasks.indexOf(task) !== -1;
   }
 
   onCancel(): void {
@@ -47,19 +56,26 @@ export class ImportTaskDialogComponent {
   }
 
   onImport(): void {
+    console.log(this.selectedTasks);
     this.dialogRef.close(this.selectedTasks);
   }
 
   toggleFilters(): void {
     this.filtersVisible = !this.filtersVisible;
-    if(this.filtersVisible)
-      this.filters.push({ column: '', condition: '', value: '' });
-    else
-    this.filters = [];
+    if (this.filtersVisible) {
+      this.filters.push({ column: '', condition: '', value: '', operator: '' });
+    } else {
+      this.filters = [];
+    }
   }
 
   addFilter(): void {
-    this.filters.push({ column: '', condition: '', value: '' });
+    if(this.filters.length === this.displayedColumns.length - 1){
+      return;
+    }
+    this.filters.push({ column: '', condition: '', value: '', operator: '' });
+    console.log(this.displayedColumns.length - 1)
+    console.log(this.filters.length)
   }
 
   removeFilter(index: number): void {
