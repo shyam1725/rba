@@ -1,0 +1,10 @@
+<div id="reorder-task">
+    <h2 mat-dialog-title>Do you want to auto fill the Task Order?</h2>
+<mat-dialog-content>
+  This option will rearrange Task Order of all tasks to run in parallel except for control events.
+</mat-dialog-content>
+<mat-dialog-actions id="reorder-button-wrapper" align="end">
+  <button mat-button id="reorder-no-button" mat-dialog-close>No</button>
+  <button mat-button id="reorder-yes-button" [mat-dialog-close]="true">Yes, Reorder Tasks</button>
+</mat-dialog-actions>
+</div>

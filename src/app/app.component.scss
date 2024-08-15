@@ -1,0 +1,97 @@
+.container {
+    padding: 20px;
+  }
+  
+  .form-row {
+    display: flex;
+    justify-content: flex-start;
+  }
+  
+  .checkbox-row {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+  }
+  
+  .advanced-options {
+    margin-top: 20px;
+  }
+  
+  .selected-tasks-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+  }
+  
+  #reorder-task {
+    margin-right: 10px;
+  }
+
+  .mat-mdc-form-field{
+    margin-right: 20px;
+  }
+
+  .button-blue {
+    background: #066DAE !important;
+    color: #fff !important;
+  }
+
+  .form-button {
+    display: flex;
+    justify-content: center;
+  }
+
+  .form-button button {
+    margin-right: 10px;
+  }
+
+  .below-label {
+    display: block; /* Ensures label is on its own line */
+    font-size: 12px; /* Adjust font size to match your design */
+    color: #666; /* Adjust the color as needed */
+    margin-top: 4px; /* Space between input and label */
+    text-align: left; /* Align the label text to the left */
+  }
+  
+  .mat-form-field {
+    margin-bottom: 2em; /* Provides space between each input and its label */
+  }
+
+.rba-flex-column {
+  display: flex;
+  flex-direction: column;
+  width: 31%;
+}
+
+.selected-task-first-column {
+  max-width: 65px;
+}
+
+.selected-task-second-column {
+  max-width: 75px;
+}
+
+#action-column {
+  min-width: 70px;
+}
+
+.selected-tasks-header h3{
+  font-size: 20px !important;
+  font-weight: bold !important;
+  position: relative !important;
+  top: 20px !important;
+}
+
+#task-order-input {
+  width: 50px;
+}

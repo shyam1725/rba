@@ -1,0 +1,97 @@
+<h1 mat-dialog-title>Add Tasks</h1>
+
+<div class="form-row">
+  <mat-radio-group aria-label="Select an option">
+    <mat-radio-button value="option1">Tasks</mat-radio-button>
+    <mat-radio-button value="option2">TaskBook</mat-radio-button>
+    <mat-radio-button value="option3">Break Events</mat-radio-button>
+  </mat-radio-group>
+  <div>
+
+    <button mat-stroked-button type="button" (click)="toggleFilters()">
+      <mat-icon>filter_list</mat-icon>Filters
+    </button>
+  </div>
+</div>
+
+<!-- Filters Section -->
+<div *ngIf="filtersVisible">
+  <div *ngFor="let filter of filters; let i = index" class="filter-row">
+    <mat-form-field>
+      <mat-select placeholder="Column" [(value)]="filter.column">
+        <mat-option value="csiId">CSI ID</mat-option>
+        <mat-option value="app">App</mat-option>
+        <mat-option value="server">Server</mat-option>
+        <mat-option value="instance">Instance</mat-option>
+        <mat-option value="env">Env</mat-option>
+        <mat-option value="fnId">Fn ID</mat-option>
+        <mat-option value="tech">Tech</mat-option>
+        <mat-option value="taskOrder">Task Order</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-select placeholder="Condition" [(value)]="filter.condition">
+        <mat-option value="contains">Contains</mat-option>
+        <mat-option value="equals">Equals</mat-option>
+        <!-- Add more conditions as needed -->
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput placeholder="Value" [(ngModel)]="filter.value">
+    </mat-form-field>
+
+    <button class="remove-condition" mat-button type="button" color="warn" (click)="removeFilter(i)" *ngIf="i > 0">
+      <mat-icon>remove_circle_outline</mat-icon> Remove
+    </button>
+    <div *ngIf="i == 0">
+      <button mat-button type="button" color="success" (click)="toggleFilters()">
+        <mat-icon>autorenew</mat-icon>
+      </button>
+      <button class="add-filter"  mat-stroked-button type="button" >
+        Search
+      </button>
+      <button *ngIf="filtersVisible" class="add-filter" mat-stroked-button type="button" (click)="addFilter()">Add
+        Filter</button>
+
+    </div>
+  </div>
+
+</div>
+
+<mat-table [dataSource]="dataSource" class="mat-elevation-z8 rba-mat-table">
+
+
+  <ng-container matColumnDef="csiId">
+    <mat-header-cell *matHeaderCellDef> CSI ID </mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.csiId}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="app">
+    <mat-header-cell *matHeaderCellDef> App </mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.app}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="server">
+    <mat-header-cell *matHeaderCellDef> Server </mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.server}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="instance">
+    <mat-header-cell *matHeaderCellDef> Instance </mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.instance}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="tech">
+    <mat-header-cell *matHeaderCellDef> Tech </mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.tech}} </mat-cell>
+  </ng-container>
+
+  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+</mat-table>
+
+<div mat-dialog-actions class="form-actions">
+  <button mat-button (click)="onCancel()">Cancel</button>
+  <button class="add-filter" mat-button (click)="onImport()">Add Tasks</button>
+</div>

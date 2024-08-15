@@ -1,0 +1,179 @@
+<div class="container">
+  <h2>RBA20/ New Task</h2>
+  <form>
+    <div class="form-row">
+      <div class="rba-flex-column">
+        <label class="below-label">TaskBook ID</label>
+        <mat-form-field class="form-field">
+          <input matInput placeholder="Enter TaskBook ID">
+        </mat-form-field>
+      </div>
+      <div class="rba-flex-column">
+        <label class="below-label">TaskBook Name</label>
+        <mat-form-field class="form-field">
+          <input matInput placeholder="Enter TaskBook Name">
+        </mat-form-field>
+      </div>
+      <div class="rba-flex-column">
+        <label class="below-label">TaskBook Type</label>
+        <mat-form-field class="form-field">
+          <mat-select placeholder="Select TaskBook Type">
+            <mat-option value="type1">Type 1</mat-option>
+            <mat-option value="type2">Type 2</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      
+      
+    </div>
+    <div class="form-row">
+      <div class="rba-flex-column">
+        <label class="below-label">Comment</label>
+        <mat-form-field class="form-field">
+          <input matInput placeholder="Enter comment">
+        </mat-form-field>
+      </div>
+      <div class="rba-flex-column">
+        <label class="below-label">Description</label>
+        <mat-form-field class="form-field">
+          <input matInput placeholder="Enter Description">
+        </mat-form-field>
+      </div>
+      
+      
+    </div>
+    <div class="checkbox-row">
+      <mat-checkbox>OTC Master TaskBook</mat-checkbox>
+      <mat-checkbox>Continue on Error</mat-checkbox>
+      <button mat-button color="primary" type="button" (click)="toggleAdvancedOptions()">
+        <mat-icon *ngIf="!showAdvancedOptions">add</mat-icon> <mat-icon *ngIf="showAdvancedOptions">remove</mat-icon> Advanced Options
+      </button>
+    </div>
+
+    <div *ngIf="showAdvancedOptions" class="advanced-options">
+      <mat-checkbox>External Interface</mat-checkbox>
+      <mat-checkbox>Keep INC Flag Open</mat-checkbox>
+      <h3>Send Email On</h3>
+      <mat-checkbox>Submission</mat-checkbox>
+      <mat-checkbox>Success</mat-checkbox>
+      <mat-checkbox>Failure</mat-checkbox>
+      <mat-checkbox>Approval</mat-checkbox>
+      <mat-checkbox>Partial Success</mat-checkbox>
+      <mat-checkbox>Hold</mat-checkbox>
+      <div class="form-row">
+        <div class="rba-flex-column">
+          <label class="below-label">Success Email</label>
+          <mat-form-field class="form-field">
+            <input matInput placeholder="Enter Success Email">
+          </mat-form-field>
+        </div>
+        <div class="rba-flex-column">
+          <label class="below-label">Success Message</label>
+          <mat-form-field class="form-field">
+            <input matInput placeholder="Enter Success Message">
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="rba-flex-column">
+          <label class="below-label">Failure Email</label>
+          <mat-form-field class="form-field">
+            <input matInput placeholder="Enter Failure Email">
+          </mat-form-field>
+        </div>
+        <div class="rba-flex-column">
+          <label class="below-label">Failure Message</label>
+          <mat-form-field class="form-field">
+            <input matInput placeholder="Enter Failure Message">
+          </mat-form-field>
+        </div>        
+      </div>
+    </div>
+
+    <div class="selected-tasks-header">
+      <h3>Selected Tasks</h3>
+      <div>
+        <button mat-stroked-button id="reorder-task" (click)="openReorderDialog()"
+          type="button"><mat-icon>filter_list</mat-icon>Reorder Tasks</button>
+        <button mat-stroked-button type="button" (click)="openImportTasks()"><mat-icon>download</mat-icon>Add
+          Tasks</button>
+      </div>
+    </div>
+
+    <mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+      <ng-container matColumnDef="Select">
+        <mat-header-cell class="selected-task-first-column" *matHeaderCellDef>
+          <mat-checkbox (change)="$event ? selectAll() : null"></mat-checkbox>
+        </mat-header-cell>
+        <mat-cell class="selected-task-first-column" *matCellDef="let row">
+          <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? toggleSelection(row) : null"></mat-checkbox>
+        </mat-cell>
+      </ng-container>
+    
+      <ng-container matColumnDef="csiId">
+        <mat-header-cell class="selected-task-second-column" *matHeaderCellDef> CSI ID </mat-header-cell>
+        <mat-cell class="selected-task-second-column" *matCellDef="let element"> {{element.csiId}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="app">
+        <mat-header-cell *matHeaderCellDef> App </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.app}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="server">
+        <mat-header-cell *matHeaderCellDef> Server </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.server}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="instance">
+        <mat-header-cell *matHeaderCellDef> Instance </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.instance}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="env">
+        <mat-header-cell *matHeaderCellDef> Env </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.env}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="fnId">
+        <mat-header-cell *matHeaderCellDef> Fn ID </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.fnId}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="tech">
+        <mat-header-cell *matHeaderCellDef> Tech </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.tech}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="taskOrder">
+        <mat-header-cell *matHeaderCellDef> Task Order </mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          <input id="task-order-input" type="number"/>
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="action">
+        <mat-header-cell *matHeaderCellDef> Action </mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          <mat-select id="action-column" [(value)]="element.action" placeholder="Select Action">
+            <mat-option value="Break">Break</mat-option>
+            <mat-option value="Delete">Start</mat-option>
+            <mat-option value="Delete">Stop</mat-option>
+          </mat-select>
+          <button mat-button color="warn"><mat-icon>delete</mat-icon></button>
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
+
+    <mat-paginator [length]="totalItems" [pageSize]="pageSize" (page)="onPageChange($event)">
+    </mat-paginator>
+
+    <div class="form-button">
+      <button mat-raised-button type="button" (click)="cancel()">Cancel</button>
+      <button mat-raised-button type="button" class="button-blue" (click)="save()">Save</button>
+    </div>
+  </form>
+</div>
